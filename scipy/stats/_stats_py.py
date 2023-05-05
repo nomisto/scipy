@@ -10242,14 +10242,14 @@ def rankdata(a, method='average', *, axis=None, nan_policy='propagate'):
         result = inv + 1
     else:
         arr = arr[sorter]
-        obs = np.r_[True, arr[1:] != arr[:-1]]
+        obs = np.concatenate((np.array([True]), arr[1:] != arr[:-1]), axis=0)
         dense = obs.cumsum()[inv]
 
         if method == 'dense':
             result = dense
         else:
             # cumulative counts of each unique value
-            count = np.r_[np.nonzero(obs)[0], len(obs)]
+            count = np.concatenate((np.nonzero(obs)[0], np.array([len(obs)])), axis=0)
 
             if method == 'max':
                 result = count[dense]
